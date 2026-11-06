@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071629">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Korea Fund">
+<title>KOREA FUND – Shine Htet</title>
+<style>
+:root{color-scheme:dark;--bg:#071629;--panel:#102a4a;--muted:#9db9d9;--green:#20d68a;--line:#315171}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#071629,#0b2038 60%,#061323);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f5f9ff;min-height:100vh;padding:22px 14px calc(30px + env(safe-area-inset-bottom))}
+main{max-width:520px;margin:0 auto}.card{background:var(--panel);border:1px solid #1e4165;border-radius:20px;padding:20px;margin:12px 0;box-shadow:0 12px 32px #0003}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:23px;margin:0;letter-spacing:.3px}.edition{font-size:11px;color:#54e69a;border:1px solid #277c62;border-radius:99px;padding:7px 10px;white-space:nowrap}
+.sub{font-size:12px;color:var(--muted);letter-spacing:2px;margin:8px 0 18px}.money{font-size:clamp(24px,7vw,34px);font-weight:800;margin:0 0 18px;font-variant-numeric:tabular-nums}
+.stats{display:flex;justify-content:space-between;align-items:center;margin:0 0 9px;font-weight:700}.pct{color:#54e69a}.track{height:13px;border-radius:20px;background:#263d50;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#14b879,#54e69a);border-radius:20px;transition:width .25s}
+.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:7px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.statbox{background:#102a4a;border:1px solid #1e4165;border-radius:15px;padding:15px;min-height:88px}.statbox.wide{grid-column:1/-1}.label{font-size:12px;color:var(--muted);margin-bottom:8px}.value{font-weight:700;font-size:15px;overflow-wrap:anywhere}.big{font-size:27px}
+button{width:100%;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;margin-top:12px}
+button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--green);color:#06251b}.secondary{background:transparent;border:1px solid #54718d;color:#dceaff}
+.note{text-align:center;color:#54e69a;font-size:12px;min-height:18px;margin:10px 0}
+.history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.history-head h2{font-size:16px;margin:0}.history{display:grid;gap:8px}.entry{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #28445f;font-size:13px}.entry:last-child{border:0}.gain{color:#54e69a;white-space:nowrap}.empty{color:var(--muted);font-size:13px}
+footer{text-align:center;padding:15px 8px 5px}footer strong{display:block;color:#54e69a;font-size:15px;margin-top:8px}footer small{display:block;color:var(--muted);font-size:11px;letter-spacing:1px;margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+ <section class="card">
+  <header><h1>🇰🇷 KOREA FUND</h1><span class="edition">SHINE HTET</span></header>
+  <div class="sub">BETTER FUTURE • SHINE HTET</div>
+  <p class="money" id="money">฿0 / ฿30,100</p>
+  <div class="stats"><span id="days">🔥 0/86 ရက်</span><span class="pct" id="pct">0.0%</span></div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <div class="ends"><span>0%</span><span>100%</span></div>
+ </section>
+ <section class="grid">
+  <div class="statbox"><div class="label">📅 Start Date</div><div class="value" id="start">အလုပ်စတဲ့နေ့မှာ အလိုအလျောက်ပေါ်မယ်</div></div>
+  <div class="statbox"><div class="label">⏳ ကျန်ရက်</div><div class="value big" id="remaining">86 ရက်</div></div>
+  <div class="statbox wide"><div class="label">📆 နောက်ဆုံးအလုပ်ဆင်းတဲ့နေ့</div><div class="value" id="last">မရှိသေးပါ</div></div>
+ </section>
+ <button class="primary" id="work">🟢 ✅ ဒီနေ့ အလုပ်ဆင်းပြီ (+฿350)</button>
+ <div class="note" id="note" aria-live="polite"></div>
+ <button class="secondary" id="reset">↺ Reset</button>
+ <section class="card">
+  <div class="history-head"><h2>📋 အလုပ်ဆင်းခဲ့သောနေ့များ</h2><span id="count" class="label">0 days</span></div>
+  <div class="history" id="history"><div class="empty">အလုပ်စတင်တဲ့နေ့မှာ History ပေါ်လာပါမယ်။</div></div>
+ </section>
+ <footer>🇰🇷 BETTER FUTURE<strong>တစ်ရက်ပြီးတိုင်း ကိုရီးယားနဲ့ တစ်ရက်နီးလာပြီ။</strong><small>SHINE HTET • KOREA DREAM</small></footer>
+</main>
+<script>
+const KEY='shine-htet-korea-fund-v1';
+const $=id=>document.getElementById(id);
+const moneyFmt=n=>n.toLocaleString('en-US');
+function todayLocal(){
+  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));
+  return `${p.year}-${p.month}-${p.day}`;
+}
+function pretty(s){if(!s)return '';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));return x&&Array.isArray(x.history)?x:{history:[]};}catch{return {history:[]};}}
+let data=load();
+function save(){localStorage.setItem(KEY,JSON.stringify(data));}
+function render(){
+ const n=data.history.length, amount=n*350, pct=Math.min(100,n/86*100);
+ $('money').textContent=`฿${moneyFmt(amount)} / ฿30,100`;
+ $('days').textContent=`🔥 ${n}/86 ရက်`;
+ $('pct').textContent=`${pct.toFixed(1)}%`;
+ $('fill').style.width=`${pct}%`;
+ $('start').textContent=data.history.length?pretty(data.history[0]):'အလုပ်စတဲ့နေ့မှာ အလိုအလျောက်ပေါ်မယ်';
+ $('remaining').textContent=`${Math.max(0,86-n)} ရက်`;
+ $('last').textContent=n?pretty(data.history[n-1]):'မရှိသေးပါ';
+ $('count').textContent=`${n} days`;
+ $('work').disabled=n>=86||data.history.includes(todayLocal());
+ $('work').textContent=data.history.includes(todayLocal())?'✅ ဒီနေ့ အလုပ်ဆင်းပြီးပါပြီ':'🟢 ✅ ဒီနေ့ အလုပ်ဆင်းပြီ (+฿350)';
+ $('history').innerHTML='';
+ if(!n){$('history').innerHTML='<div class="empty">အလုပ်စတင်တဲ့နေ့မှာ History ပေါ်လာပါမယ်။</div>';return;}
+ [...data.history].reverse().forEach((date,idx)=>{
+   const day=n-idx, row=document.createElement('div');row.className='entry';
+   const left=document.createElement('span');left.textContent=`Day ${day} · ${pretty(date)}`;
+   const right=document.createElement('span');right.className='gain';right.textContent='+฿350';
+   row.append(left,right);$('history').append(row);
+ });
+}
+$('work').addEventListener('click',()=>{
+ const d=todayLocal();
+ if(data.history.includes(d)||data.history.length>=86)return;
+ data.history.push(d);save();$('note').textContent='ဒီနေ့အတွက် ฿350 ထည့်ပြီးပါပြီ။';render();
+});
+$('reset').addEventListener('click',()=>{
+ if(!confirm('Korea Fund Tracker ရဲ့ History နဲ့ စုငွေမှတ်တမ်းအားလုံးကို Reset လုပ်မှာ သေချာပါသလား။'))return;
+ data={history:[]};save();$('note').textContent='Tracker ကို Reset လုပ်ပြီးပါပြီ။';render();
+});
+render();
+</script>
+</body>
+</html>
